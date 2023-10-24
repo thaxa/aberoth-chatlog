@@ -9,6 +9,8 @@
 // @match        https://aberoth.com/*
 // @icon         https://icons.duckduckgo.com/ip2/aberoth.com.ico
 // @grant        GM_addStyle
+// @grant       unsafeWindow
+
 // ==/UserScript==
 
 //css
@@ -22,6 +24,8 @@ const CHAT_COLOR_NAME = 'rgba(255,255,255,1)'
 const CHAT_COLOR_NAME_UNFRIENDLY = "rgba(255,175,175,1)"
 const CHAT_COLOR_NAME_THIEF = "rgba(255,215,175,1)" //holding engraved item
 const NPCS = ["Inala", "Gomald", "Tavelor", "Lysis", "Sholop", "Darklow", "Wodon", "Magerlin", "Gurun"]
+
+unsafeWindow.aberothChatLog = {}
 
 const chatboxContainer = document.createElement('div')
 chatboxContainer.id = "chatboxContainer"
@@ -118,7 +122,7 @@ function Fr(t, a) {
     if (id === 0) {
         for (const user of Object.values(memory)) {
             let color = (user.col === CHAT_COLOR_NAME ? CHAT_COLOR_FRIENDLY : user.col)
-            addText(`${user.name} LEFT`, CHAT_COLOR_FRIENDLY, "joinleave", `${(joinleave) ? "hide" : ""}`);
+            unsafeWindow.aberothChatLog.addText(`${user.name} LEFT`, CHAT_COLOR_FRIENDLY, "joinleave", `${(joinleave) ? "hide" : ""}`);
         }
         memory = {}
     }
@@ -132,7 +136,7 @@ function Fr(t, a) {
             //if user still exists, stop
             if (Object.values(memory).find(e => e.name === tempObj.name)) return;
             let color = tempObj.col === CHAT_COLOR_NAME ? CHAT_COLOR_FRIENDLY : tempObj.col
-            addText(`${tempObj.name} LEFT`, color, "joinleave", `${(joinleave) ? "hide" : ""}`);
+            unsafeWindow.aberothChatLog.addText(`${tempObj.name} LEFT`, color, "joinleave", `${(joinleave) ? "hide" : ""}`);
         }
         //text not game info, or 'Say:[text]' or '...'
         if ((x !== 0 || y !== 0) && text !== '...') {
@@ -144,8 +148,8 @@ function Fr(t, a) {
 
                     //if user doesnt exist (with dif ID), log join
                     if (!Object.values(memory).find(e => e.name === text)) {
-                        if (app.game.Bc.HI === CHAT_COLOR_NAME) addText(`${text} JOINED`, CHAT_COLOR_FRIENDLY, "joinleave", `${(joinleave) ? "hide" : ""}`)
-                        else addText(`${text} JOINED`, app.game.Bc.HI, "joinleave", `${(joinleave) ? "hide" : ""}`)
+                        if (app.game.Bc.HI === CHAT_COLOR_NAME) unsafeWindow.aberothChatLog.addText(`${text} JOINED`, CHAT_COLOR_FRIENDLY, "joinleave", `${(joinleave) ? "hide" : ""}`)
+                        else unsafeWindow.aberothChatLog.addText(`${text} JOINED`, app.game.Bc.HI, "joinleave", `${(joinleave) ? "hide" : ""}`)
                     }
                     memory[id] = {}
                     memory[id].name = text
@@ -153,7 +157,7 @@ function Fr(t, a) {
                     break;
 
                 default:
-                    addText(text, app.game.Bc.HI)
+                    unsafeWindow.aberothChatLog.addText(text, app.game.Bc.HI)
                     break;
             }
         }
@@ -168,20 +172,21 @@ function ts() {
     return `${h}:${m}:${s}`;
 }
 
-let chatCount = 0;
-function addText(text, color = "white", ...cssClasses) {
+
+unsafeWindow.aberothChatLog.addText = function addText(text, color = "white", ...cssClasses) {
     if (saturateColors) {
         let arr = str2num(color)
         if (arr) color = RGBToSaturated(arr)
     }
+    console.log("sat", saturateColors)
     const div = document.createElement('div');
     div.classList.add('msg')
     cssClasses.forEach((c) => { if (c) div.classList.add(c) })
     div.innerHTML = `<span class="timestamp">${ts()}</span> <span style="color:${color}; display: block;word-break: break-word;">${text}</span>`
     chatboxmsgs.appendChild(div)
     chatbox.scrollTop = chatbox.scrollHeight;
-    chatCount += 1
     //del oldest child
+    let chatCount = chatboxmsgs.childNodes.length
     if (chatCount > CHAT_LIMIT) chatboxmsgs.removeChild(chatboxmsgs.firstChild)
 }
 
