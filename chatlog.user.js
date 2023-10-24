@@ -178,7 +178,6 @@ unsafeWindow.aberothChatLog.addText = function addText(text, color = "white", ..
         let arr = str2num(color)
         if (arr) color = RGBToSaturated(arr)
     }
-    console.log("sat", saturateColors)
     const div = document.createElement('div');
     div.classList.add('msg')
     cssClasses.forEach((c) => { if (c) div.classList.add(c) })
