@@ -3,7 +3,7 @@
 // @namespace    https://github.com/shobcorp/aberoth-chatlog
 // @updateURL    https://raw.githubusercontent.com/shobcorp/aberoth-chatlog/main/chatlog.user.js
 // @downloadURL  https://raw.githubusercontent.com/shobcorp/aberoth-chatlog/main/chatlog.user.js
-// @version      1.3.27
+// @version      1.3.27.5
 // @description  Log chat messages to a chatbox
 // @author       S.Corp
 // @match        https://aberoth.com/*
@@ -26,6 +26,7 @@ const CHAT_COLOR_NAME_THIEF = "rgba(255,215,175,1)" //holding engraved item
 const NPCS = ["Inala", "Gomald", "Tavelor", "Lysis", "Sholop", "Darklow", "Wodon", "Magerlin", "Gurun"]
 
 unsafeWindow.aberothChatLog = {}
+
 
 const chatboxContainer = document.createElement('div')
 chatboxContainer.id = "chatboxContainer"
@@ -88,8 +89,10 @@ document.getElementById('satcol').addEventListener('change', (e) => {
     if (saturateColors) { }
 })
 
+const eve = new Event("aberothchatlog")
+
 let playerName;
-window.addEventListener('load', function () {
+window.addEventListener('load', () => {
     playerName = app.game.playerName.charAt(0).toUpperCase() + app.game.playerName.slice(1)
     //hook into textCommand
     const FrFunc = ES.prototype.Fr
@@ -100,7 +103,8 @@ window.addEventListener('load', function () {
             return FrFunc.apply(this, arguments);
         };
     }
-}, false);
+    window.dispatchEvent(eve);
+});
 
 //local app.game.Bc.DA
 let memory = {}
