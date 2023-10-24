@@ -3,7 +3,7 @@
 // @namespace    https://github.com/shobcorp/aberoth-chatlog
 // @updateURL    https://raw.githubusercontent.com/shobcorp/aberoth-chatlog/main/chatlog.user.js
 // @downloadURL  https://raw.githubusercontent.com/shobcorp/aberoth-chatlog/main/chatlog.user.js
-// @version      0.3.2.74
+// @version      1.3.27
 // @description  Log chat messages to a chatbox
 // @author       S.Corp
 // @match        https://aberoth.com/*
