@@ -3,10 +3,11 @@
 // @namespace    https://github.com/shobcorp/aberoth-chatlog
 // @updateURL    https://raw.githubusercontent.com/shobcorp/aberoth-chatlog/main/chatlog.user.js
 // @downloadURL  https://raw.githubusercontent.com/shobcorp/aberoth-chatlog/main/chatlog.user.js
-// @version      1.32.7
+// @version      1.32.75
 // @description  Log chat messages to a chatbox
 // @author       S.Corp
-// @match        https://aberoth.com/*
+// @match        https://aberoth.com/
+// @match        https://aberoth.com/index.php?*
 // @icon         https://icons.duckduckgo.com/ip2/aberoth.com.ico
 // @grant        GM_addStyle
 // @grant        unsafeWindow
@@ -19,9 +20,7 @@ GM_addStyle(`
 .msg {display: grid;grid-template-columns: min-content 1fr;gap: 0.5em;}.hide {display: none;}#chatboxTop, #settingsTop {height:30px;display: flex;justify-content: space-between;}#messages {display: flex;flex-direction: column;justify-content: end;}#chatbox {border: 5px ridge tan;height: 200px;border-right: 0;border-left: 0;overflow: auto;}#filters{margin: auto 0;display:flex;}.btn {height: 30px;width: 40px;}#bin {background: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="16" height="16" viewBox="0 0 16 16"%3E%3Cpath fill="%232b2116" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"%2F%3E%3C%2Fsvg%3E'),tan;background-repeat: no-repeat;background-position: center;}#cog{background: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="20" height="20" viewBox="0 0 24 24"%3E%3Cpath fill="currentColor" d="M19.14 12.94c.04-.3.06-.61.06-.94c0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6s3.6 1.62 3.6 3.6s-1.62 3.6-3.6 3.6z"%2F%3E%3C%2Fsvg%3E'), tan;background-repeat: no-repeat;background-position: center;}.item{font-size: 12pt;padding: 0 10px;}#btns{padding:0 10px;margin: auto 0;}.rainbow {background-image: linear-gradient(to left, #ff6bff, #c074f7, #6464ff, #11ff11, yellow, orange, red);-webkit-background-clip: text;color: transparent;}input[type="checkbox"]{vertical-align: middle;}#close {background: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="24" height="24" viewBox="0 0 24 24"%3E%3Cpath fill="%232b2116" d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6L6.4 19Z"%2F%3E%3C%2Fsvg%3E'), tan;background-repeat: no-repeat;background-position: center;}#settingsMain {display:grid;grid-template-columns: 1fr 1fr;border-top:5px ridge tan;padding: 5px;}
 `)
 
-
-let CHAT_COLOR_FRIENDLY = "#95D776"
-const CHAT_LIMIT = 200
+const CHAT_LIMIT = 500
 
 
 const CHAT_COLOR_NAME = 'rgba(255,255,255,1)'
@@ -106,29 +105,33 @@ document.getElementById('bin').addEventListener('click', () => {
     chatboxmsgs.innerHTML = '';
 })
 
-let joinleave = false
-document.getElementById('joinleave').addEventListener('change', (e) => {
+let joinleave = (GM_getValue("joinLeaveToggle", "")) ? GM_getValue("joinLeaveToggle", "") : false;
+const joinLeaveToggleCheckbox = document.getElementById('joinleave')
+joinLeaveToggleCheckbox.checked = joinleave;
+joinLeaveToggleCheckbox.addEventListener('change', (e) => {
+    joinleave = e.target.checked
+    GM_setValue("joinLeaveToggle", joinleave)
     let nodes = document.querySelectorAll('.joinleave');
-    joinleave = !joinleave
-    e.target.checked = joinleave
-    if (joinleave) {
-        nodes.forEach((node) => {
-            node.classList.add('hide')
-        })
-    }
-    else {
-        nodes.forEach((node) => {
-            node.classList.remove('hide')
-        })
-    }
+    if (joinleave) nodes.forEach((node) => { node.classList.add('hide') });
+    else nodes.forEach((node) => { node.classList.remove('hide') });
 })
 
-let saturateColors = false;
-document.getElementById('satcol').addEventListener('change', (e) => {
-    saturateColors = !saturateColors
-    e.target.checked = saturateColors
-    if (saturateColors) { }
+let saturateToggle = (GM_getValue("saturateToggle", "")) ? GM_getValue("saturateToggle", "") : false;
+const saturateToggleCheckbox = document.getElementById('satcol')
+saturateToggleCheckbox.checked = saturateToggle;
+saturateToggleCheckbox.addEventListener('change', (e) => {
+    saturateToggle = e.target.checked
+    GM_setValue("saturateToggle", saturateToggle)
 })
+
+let hiscoreSkillToggle = (GM_getValue("hiscoreToggle", "")) ? GM_getValue("hiscoreToggle", "") : false;
+const hiscoreToggleCheckbox = document.getElementById('hiscoretoggle')
+hiscoreToggleCheckbox.checked = hiscoreSkillToggle;
+hiscoreToggleCheckbox.addEventListener('change', (e) => {
+    hiscoreSkillToggle = e.target.checked
+    GM_setValue("hiscoreToggle", hiscoreSkillToggle)
+})
+
 const eve = new Event("aberothchatlog")
 
 let playerName;
@@ -233,7 +236,7 @@ function ts() {
 
 
 unsafeWindow.aberothChatLog.addText = function addText(text, color = "white", ...cssClasses) {
-    if (saturateColors) {
+    if (saturateToggle) {
         let arr = str2num(color)
         if (arr) color = RGBToSaturated(arr)
     }
@@ -282,14 +285,14 @@ function loadWindow(win) {
             chatboxTop.style.display = "none"
             chatbox.style.display = "none"
             chatboxBottom.style.display = "none"
-            settings.style.display = "block"
+            settingsEl.style.display = "block"
             break;
         //chatlog window
         case 1:
             chatboxTop.style.display = "flex"
             chatbox.style.display = "block"
             chatboxBottom.style.display = "grid"
-            settings.style.display = "none"
+            settingsEl.style.display = "none"
     }
 }
 
@@ -311,9 +314,6 @@ document.getElementById('hslastupdated').innerText = `updated: ${GM_getValue("ti
 document.getElementById('hsbtn').addEventListener('click', () => {
     updateHighscoreData()
 })
-
-let hiscoreSkillToggle = false
-document.getElementById('hiscoretoggle').addEventListener('click', () => hiscoreSkillToggle = !hiscoreSkillToggle)
 
 async function updateHighscoreData() {
     let json = {}
@@ -342,17 +342,11 @@ async function updateHighscoreData() {
 }
 
 
-
 //color
-CHAT_COLOR_FRIENDLY
+let CHAT_COLOR_FRIENDLY = (GM_getValue("CHAT_COLOR_FRIENDLY")) ? GM_getValue("CHAT_COLOR_FRIENDLY") : "#ffffff"
 const colorInput = document.getElementById('colorInput')
 colorInput.value = CHAT_COLOR_FRIENDLY
 colorInput.addEventListener('input', () => {
     CHAT_COLOR_FRIENDLY = colorInput.value
+    GM_setValue("CHAT_COLOR_FRIENDLY", colorInput.value)
 })
-
-
-
-
-
-
