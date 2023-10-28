@@ -1,6 +1,8 @@
 // ==UserScript==
 // @name         Aberoth ChatLog: Screenshot
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/shobcorp/aberoth-chatlog/blob/main/addon/screenshot.user.js
+// @updateURL    https://raw.githubusercontent.com/shobcorp/aberoth-chatlog/main/addon/screenshot.user.js
+// @downloadURL  https://raw.githubusercontent.com/shobcorp/aberoth-chatlog/main/addon/screenshot.user.js
 // @version      1.0
 // @description  Adds btn to copy screenshot to clipboard (about:config -> clipboardItem FF)
 // @author       S.Corp
