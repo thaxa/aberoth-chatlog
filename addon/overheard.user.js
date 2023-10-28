@@ -1,6 +1,8 @@
 // ==UserScript==
 // @name         Aberoth ChatLog: Overheard
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/shobcorp/aberoth-chatlog/blob/main/addon/overheard.user.js
+// @updateURL    https://raw.githubusercontent.com/shobcorp/aberoth-chatlog/main/addon/overheard.user.js
+// @downloadURL  https://raw.githubusercontent.com/shobcorp/aberoth-chatlog/main/addon/overheard.user.js
 // @version      0.5
 // @description  Shows players,daynight & moon phase in Aberoth ChatLog
 // @author       S.Corp
