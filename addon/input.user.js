@@ -1,6 +1,8 @@
 // ==UserScript==
 // @name         Aberoth ChatLog: Input
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/shobcorp/aberoth-chatlog/blob/main/addon/input.user.js
+// @updateURL    https://raw.githubusercontent.com/shobcorp/aberoth-chatlog/main/addon/input.user.js
+// @downloadURL  https://raw.githubusercontent.com/shobcorp/aberoth-chatlog/main/addon/input.user.js
 // @version      1.0
 // @description  Chat from input box below log, kind of buggy
 // @author       S.Corp
