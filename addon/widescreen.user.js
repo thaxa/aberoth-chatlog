@@ -1,6 +1,8 @@
 // ==UserScript==
 // @name         Aberoth ChatLog: Widescreen
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/shobcorp/aberoth-chatlog/blob/main/addon/widescreen.user.js
+// @updateURL    https://raw.githubusercontent.com/shobcorp/aberoth-chatlog/main/addon/widescreen.user.js
+// @downloadURL  https://raw.githubusercontent.com/shobcorp/aberoth-chatlog/main/addon/widescreen.user.js
 // @version      1.0
 // @description  Adds widescreen toggle in Aberoth ChatLog
 // @author       S.Corp
