@@ -3,7 +3,7 @@
 // @namespace    https://github.com/shobcorp/aberoth-chatlog/blob/main/addon/overheard.user.js
 // @updateURL    https://raw.githubusercontent.com/shobcorp/aberoth-chatlog/main/addon/overheard.user.js
 // @downloadURL  https://raw.githubusercontent.com/shobcorp/aberoth-chatlog/main/addon/overheard.user.js
-// @version      0.5
+// @version      0.6
 // @description  Shows players,daynight & moon phase in Aberoth ChatLog
 // @author       S.Corp
 // @match        https://aberoth.com/
@@ -117,6 +117,7 @@ async function updateOnline() {
             img = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAMAAAAolt3jAAAAvVBMVEUAAAAAAAA+P0NFREUbHB5JSEg2PEc6PUQ1OURBQUMxNkAuND7Pztuwt9JFRUk6PkgwOUgvNkKWpMg3OkAuMjonLjoqLCsgIyd3o+jMyNa3wtayudSmt9SCn9S3u9KotM+bqs2JnszPzMi9vsfHw8O2tsBxkL9ihr9UfrqtsLl5kLixs7dMd7dviLaXobSPmrFkf66Ym6mQnKiYl6KPlpyWk5t0fY5yfYQ4WIR7fnxfZ28zPk0/Q0sgJi4fHx8BHsvPAAAAAXRSTlMAQObYZgAAAJJJREFUCNc9z9cOgzAMBdA6gSQkBRJG6d57793+/2cVh4r75CNZunYFAzY4Wd3XszR14K/lfCpjLj9gFe22VyWFURnkOvYWk0QpwUyCrLbGl9ho9g6lAzm7o5PQrzAIeA3p9w+MhYQGLnLoDzacEOJRF5cfjaiurShg0crv7DnyWxSfm21BqFeeBc9b5gCqSPnBD1OBCcPo4QnLAAAAAElFTkSuQmCC"
             break;
         case 'new moon':
+        case 'The moon is new.':
             img = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAMAAAAolt3jAAAAgVBMVEUAAAAAAAA+P0NBQUQ3OkIxNkA0O0g8PkVJSEg0OUQ5PEMuMjgaHB5DREZFREUuNUE8PD0vND03ODokJydBREtFRkgsN0g4PUcmM0c9PUE1OEEqMkFAQEAuMz8hKzwqLzkZJjktMDMqLCsdISceHh8zPk05QEsmLj0mLTogJi4SHCkQjkRYAAAAAXRSTlMAQObYZgAAAIpJREFUCNc9z1cWhCAMBdAJUgRsgL07Tt//AoeIx/eVe/KRvBsGjvgh6LfO7yWBU591ZlSxLxwyWmvDZD7t4LX11mqTy4YtyIgWRZ/XvGxYAp6q6CR/vspK3JGUCc4FSasYOdKhFoKQKIsfno5MLfdK4wzwkKVDq7qwRG9KUpKO11uwO5cAKuRq8AdOowd5YQ9b4gAAAABJRU5ErkJggg=="
     }
     document.getElementById('OH-moon').innerHTML = `<img title="${moon}" src="${img}">`
